@@ -61,8 +61,6 @@ if __name__ == '__main__':
     else:
         device = torch.device('cuda:%d' % gpu)
 
-    print(torch.cuda.is_available())
-    exit()
 
     cam = args.cam_id
     snapshot_path = args.snapshot
