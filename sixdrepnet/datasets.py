@@ -302,6 +302,55 @@ class Pose_300W_LP(Dataset):
     def __len__(self):
         # 122,450
         return self.length
+    
+
+
+class SYPR(Dataset):
+    def __init__(self, data_dir, filename_path, transform, img_ext='.jpg', annot_ext='.txt', image_mode='RGB'):
+        self.data_dir = data_dir
+        self.transform = transform
+        self.img_ext = img_ext
+        self.annot_ext = annot_ext
+
+        filename_list = get_list_from_filenames(filename_path)
+
+        self.X_train = filename_list
+        self.y_train = filename_list
+        self.image_mode = image_mode
+        self.length = len(filename_list)
+
+    def __getitem__(self, index):
+        img = Image.open(os.path.join(self.data_dir, self.X_train[index] + self.img_ext))
+        img = img.convert(self.image_mode)
+        txt_path = os.path.join(self.data_dir, self.y_train[index] + self.annot_ext)
+
+        # We get the pose in radians
+        annot = open(txt_path, 'r')
+        line = annot.readline().split(' ')
+        pose = [float(line[0]), float(line[1]), float(line[2])]
+
+        # And convert to degrees.
+        yaw = pose[0]
+        pitch = pose[1]
+        roll = pose[2]
+
+        # Bin values
+        bins = np.array(range(-99, 102, 3))
+        labels = torch.LongTensor(np.digitize([yaw, pitch, roll], bins) - 1)
+        cont_labels = torch.FloatTensor([yaw, pitch, roll])
+
+        if self.transform is not None:
+            img = self.transform(img)
+
+        return img, labels, cont_labels, self.X_train[index]
+
+    def __len__(self):
+        # train: 18,863
+        # test: 1,966
+        return self.length
+    
+
+
 
 def getDataset(dataset, data_dir, filename_list, transformations, train_mode = True):
     if dataset == 'Pose_300W_LP':
@@ -318,6 +367,9 @@ def getDataset(dataset, data_dir, filename_list, transformations, train_mode = T
             data_dir, filename_list, transformations)
     elif dataset == 'AFW':
         pose_dataset = AFW(
+            data_dir, filename_list, transformations)
+    elif dataset == 'SYPR':
+        pose_dataset = SYPR(
             data_dir, filename_list, transformations)
     else:
         raise NameError('Error: not a valid dataset name')
