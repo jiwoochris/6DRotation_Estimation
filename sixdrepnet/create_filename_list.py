@@ -41,8 +41,8 @@ if __name__ == '__main__':
 
     for root, dirs, files in os.walk('.'): 
         for f in files: 
-            if f[-4:] == '.jpg': 
-                mat_path = os.path.join(root, f.replace('.jpg', '.mat'))
+            if f[-4:] == '.png': 
+                mat_path = os.path.join(root, f.replace('.png', '.mat'))
                 # We get the pose in radians
                 pose = utils.get_ypr_from_mat(mat_path)
                 # And convert to degrees.

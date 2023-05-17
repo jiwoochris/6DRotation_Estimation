@@ -15,7 +15,7 @@ import utils
 def get_list_from_filenames(file_path):
     # input:    relative path to .txt file with file names
     # output:   list of relative path names
-    print(file_path)
+    print("file_path : ", file_path)
     with open(file_path) as f:
         lines = f.read().splitlines()
     return lines
@@ -306,7 +306,7 @@ class Pose_300W_LP(Dataset):
 
 
 class SYPR(Dataset):
-    def __init__(self, data_dir, filename_path, transform, img_ext='.jpg', annot_ext='.txt', image_mode='RGB'):
+    def __init__(self, data_dir, filename_path, transform, img_ext='.png', annot_ext='.txt', image_mode='RGB'):
         self.data_dir = data_dir
         self.transform = transform
         self.img_ext = img_ext
@@ -326,23 +326,22 @@ class SYPR(Dataset):
 
         # We get the pose in radians
         annot = open(txt_path, 'r')
-        line = annot.readline().split(' ')
+        line = annot.readline().split(',')
         pose = [float(line[0]), float(line[1]), float(line[2])]
 
         # And convert to degrees.
-        yaw = pose[0]
+        roll = pose[0]
         pitch = pose[1]
-        roll = pose[2]
+        yaw = pose[2]
 
-        # Bin values
-        bins = np.array(range(-99, 102, 3))
-        labels = torch.LongTensor(np.digitize([yaw, pitch, roll], bins) - 1)
+        R = utils.get_R(pitch, yaw, roll)       # 순서 어떻게 해야하지?
+
         cont_labels = torch.FloatTensor([yaw, pitch, roll])
 
         if self.transform is not None:
             img = self.transform(img)
 
-        return img, labels, cont_labels, self.X_train[index]
+        return img, torch.FloatTensor(R), cont_labels, self.X_train[index]
 
     def __len__(self):
         # train: 18,863

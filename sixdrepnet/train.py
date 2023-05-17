@@ -39,21 +39,21 @@ def parse_args():
         default=80, type=int)
     parser.add_argument(
         '--batch_size', dest='batch_size', help='Batch size.',
-        default=80, type=int)
+        default=16, type=int)
     parser.add_argument(
         '--lr', dest='lr', help='Base learning rate.',
         default=0.0001, type=float)
     parser.add_argument('--scheduler', default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument(
         '--dataset', dest='dataset', help='Dataset type.',
-        default='Pose_300W_LP', type=str) #Pose_300W_LP
+        default='SYPR', type=str) #Pose_300W_LP
     parser.add_argument(
         '--data_dir', dest='data_dir', help='Directory path for data.',
-        default='datasets/300W_LP', type=str)#BIWI_70_30_train.npz
+        default='data/DatasetProduce', type=str)#BIWI_70_30_train.npz   datasets/300W_LP
     parser.add_argument(
         '--filename_list', dest='filename_list',
         help='Path to text file containing relative paths for every example.',
-        default='datasets/300W_LP/files.txt', type=str) #BIWI_70_30_train.npz #300W_LP/files.txt
+        default='data/DatasetProduce/files.txt', type=str) #BIWI_70_30_train.npz #300W_LP/files.txt
     parser.add_argument(
         '--output_string', dest='output_string',
         help='String appended to output snapshots.', default='', type=str)
@@ -115,8 +115,7 @@ if __name__ == '__main__':
     train_loader = torch.utils.data.DataLoader(
         dataset=pose_dataset,
         batch_size=batch_size,
-        shuffle=True,
-        num_workers=4)
+        shuffle=True) # , num_workers=4
 
     model.cuda(gpu)
     crit = GeodesicLoss().cuda(gpu) #torch.nn.MSELoss().cuda(gpu)
