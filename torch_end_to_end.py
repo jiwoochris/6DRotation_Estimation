@@ -39,9 +39,10 @@ transform = transforms.Compose([
 train_df = df.sample(frac=0.8, random_state=0)
 val_df = df.drop(train_df.index)
 
+
 # Create the datasets
-train_dataset = ImageDataset(train_df, 'NewDatasetProduced0', transform)
-val_dataset = ImageDataset(val_df, 'NewDatasetProduced0', transform)
+train_dataset = ImageDataset(train_df, 'e_data', transform)
+val_dataset = ImageDataset(val_df, 'e_data', transform)
 
 
 
@@ -56,6 +57,10 @@ model.fc = nn.Linear(num_ftrs, 2)  # replace the last fc layer
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print("device : ", device)
+
+
+# # load best model
+# model.load_state_dict(torch.load('best_model.pth'))
 
 model = model.to(device)
 
@@ -76,14 +81,11 @@ from torch.utils.data import DataLoader
 train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
 val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
 
-import copy
-
-best_model_wts = copy.deepcopy(model.state_dict())
 best_loss = float('inf')
 
 no_improve = 0
 early_stop = 5
-num_epochs = 20
+num_epochs = 30
 
 for epoch in range(num_epochs):
     
@@ -104,7 +106,10 @@ for epoch in range(num_epochs):
 
     train_loss = train_loss / len(train_loader)
 
-    print(f'Epoch {epoch}/{num_epochs-1}, Train Loss: {train_loss}')
+    print(f'\nEpoch {epoch}/{num_epochs-1}, Train Loss: {train_loss}')
+    print(outputs[-3], labels[-3])
+    print(outputs[-2], labels[-2])
+    print(outputs[-1], labels[-1])
 
     model.eval()
     val_loss = 0
@@ -123,26 +128,16 @@ for epoch in range(num_epochs):
     if val_loss < best_loss:
         print(f'Saving model at epoch {epoch}')
         best_loss = val_loss
-        best_model_wts = copy.deepcopy(model.state_dict())
+        torch.save(model.state_dict(), 'best_model.pth')
+        
         no_improve = 0
     else:
         no_improve += 1
         # Early stopping
         if no_improve >= early_stop:
             print("Validation loss has not improved for 5 epochs, stopping.")
-            model.load_state_dict(best_model_wts)
             break
 
-# Load the best weights into the model
-model.load_state_dict(best_model_wts)
 
-torch.save(best_model_wts, 'best_model.pth')
-
-
-
-
-
-
-
-
+torch.save(model.state_dict(), 'best_model.pth')
 
