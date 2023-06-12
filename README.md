@@ -2,36 +2,12 @@
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/6d-rotation-representation-for-unconstrained/head-pose-estimation-on-aflw2000)](https://paperswithcode.com/sota/head-pose-estimation-on-aflw2000?p=6d-rotation-representation-for-unconstrained)
 [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/osanseviero/6DRepNet)
 
-# <div align="center"> **6D Rotation Representation for Unconstrained Head Pose Estimation (Pytorch)** </div>
+# <div align="center"> **6D Rotation Estimation for desire object (Pytorch)** </div>
 
 <p align="center">
   <img src="https://github.com/thohemp/archive/blob/main/6DRepNet2.gif" alt="animated" />
 </p>
 
-## **Citing**
-
-If you find our work useful, please cite the paper:
-
-```BibTeX
-@INPROCEEDINGS{9897219,
-  author={Hempel, Thorsten and Abdelrahman, Ahmed A. and Al-Hamadi, Ayoub},
-  booktitle={2022 IEEE International Conference on Image Processing (ICIP)}, 
-  title={6d Rotation Representation For Unconstrained Head Pose Estimation}, 
-  year={2022},
-  volume={},
-  number={},
-  pages={2496-2500},
-  doi={10.1109/ICIP46576.2022.9897219}}
-```
-## Updates
-### 13.09.2022
-* 6DRepNet is now avaiable as pip package for even more accessable usage: *pip3 install SixDRepNet*
-
-### 20.06.2022
-* 6DRepNet has been accepted to ICIP 2022.
-### 29.05.2022
-* Simplified training script
-* Updated default training configuration for more robust results
 
 ## <div align="center"> **Paper**</div>
 > Thorsten Hempel and Ahmed A. Abdelrahman and Ayoub Al-Hamadi, "6D Rotation Representation for Unconstrained Head Pose Estimation", *accepted to ICIP 2022*. [[ResearchGate]](https://www.researchgate.net/publication/358898627_6D_Rotation_Representation_For_Unconstrained_Head_Pose_Estimation)[[Arxiv]](https://arxiv.org/abs/2202.12555)
