@@ -6,7 +6,7 @@ from torchvision import transforms
 
 
 
-number = 12
+number = 109
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
